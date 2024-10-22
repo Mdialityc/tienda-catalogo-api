@@ -39,7 +39,7 @@ public class UpdateProductInCartBulkEndpoint(AppDbContext dbContext) : Endpoint<
 
         foreach (var p in productIds)
         {
-            var pc = dbContext.ProductInCars.FirstOrDefault(x => x.Product.Id == p.Id);
+            var pc = dbContext.ProductInCars.FirstOrDefault(x => x.Id == p.Id);
             if (pc is not null)
             {
                 pc.Amount = p.Amount;
