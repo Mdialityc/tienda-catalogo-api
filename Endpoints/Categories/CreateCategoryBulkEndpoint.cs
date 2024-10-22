@@ -19,6 +19,7 @@ public class CreateCategoryBulkEndpoint : Endpoint<IEnumerable<CreateCategoryReq
     public override void Configure()
     {
         Post("/categories");
+        Roles("Admin");
     }
 
     public override async Task<Results<Created, ProblemDetails>> ExecuteAsync(IEnumerable<CreateCategoryRequest> req, CancellationToken ct)
