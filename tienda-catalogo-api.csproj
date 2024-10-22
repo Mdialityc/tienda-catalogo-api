@@ -27,11 +27,9 @@
 
     <ItemGroup>
       <Folder Include="Data\Migrations\" />
-      <Folder Include="Endpoints\Auth\Responses\" />
       <Folder Include="Endpoints\Products\Requests\Validators\" />
       <Folder Include="Endpoints\Products\Responses\" />
-      <Folder Include="Endpoints\ShoppingCar\Requests\" />
-      <Folder Include="Endpoints\ShoppingCar\Responses\" />
+      <Folder Include="Endpoints\ShoppingCart\Responses\" />
     </ItemGroup>
 
 </Project>
