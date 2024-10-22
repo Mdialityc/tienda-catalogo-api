@@ -1,7 +1,7 @@
 
 /.idea
-/bin
-/obj
-*.http
 appsettings.json
 appsettings.Development.json
+/obj
+*.http
+/bin
