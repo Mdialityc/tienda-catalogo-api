@@ -17,6 +17,7 @@ public class UpdateCategoryEndpoint : Endpoint<UpdateCategoryRequest, Results<Ok
     public override void Configure()
     {
         Put("/categories/{id}");
+        Roles("Admin");
     }
 
     public override async Task<Results<Ok, NotFound, ProblemDetails>> ExecuteAsync(UpdateCategoryRequest req, CancellationToken ct)

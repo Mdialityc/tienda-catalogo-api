@@ -17,6 +17,7 @@ public class DeleteCategoryEndpoint : Endpoint<GetCategoryByIdRequest, Results<O
     public override void Configure()
     {
         Delete("/categories/{id}");
+        Roles("Admin");
     }
 
     public override async Task<Results<Ok, NotFound, ProblemDetails>> ExecuteAsync(GetCategoryByIdRequest req, CancellationToken ct)

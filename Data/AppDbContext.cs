@@ -11,7 +11,7 @@ public class AppDbContext : DbContext
 
     public DbSet<Category> Categories => Set<Category>();
     public DbSet<Product> Products => Set<Product>();
-    public DbSet<ProductInCar> ProductInCars => Set<ProductInCar>();
+    public DbSet<ProductInCart> ProductInCars => Set<ProductInCart>();
     public DbSet<SessionToken> SessionTokens => Set<SessionToken>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -20,6 +20,16 @@ public class AppDbContext : DbContext
             .HasOne(c => c.ParentCategory)
             .WithMany(c => c.Subcategories)
             .HasForeignKey(c => c.ParentCategoryId)
+            .OnDelete(DeleteBehavior.Cascade);
+        
+        modelBuilder.Entity<ProductInCart>()
+            .HasOne(pic => pic.Product)
+            .WithMany()
+            .OnDelete(DeleteBehavior.Cascade);
+        
+        modelBuilder.Entity<ProductInCart>()
+            .HasOne(pic => pic.SessionToken)
+            .WithMany()
             .OnDelete(DeleteBehavior.Cascade);
     }
 }

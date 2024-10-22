@@ -11,7 +11,7 @@ public class FinishShoppingEndpoint(AppDbContext dbContext) : EndpointWithoutReq
     public override void Configure()
     {
         Post("/shopping-cart/finish");
-        AllowAnonymous();
+        Roles("User");
     }
     
     public override async Task<Results<Ok, UnauthorizedHttpResult, ProblemDetails>> ExecuteAsync(CancellationToken ct)

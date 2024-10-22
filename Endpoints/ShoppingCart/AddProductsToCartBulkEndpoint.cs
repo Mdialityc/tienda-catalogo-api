@@ -20,7 +20,7 @@ public class AddProductsToCartBulkEndpoint : Endpoint<IEnumerable<ProductToCartR
     public override void Configure()
     {
         Post("/shopping-cart");
-        AllowAnonymous();
+        Roles("User");
     }
 
     public override async Task<Results<Created, UnauthorizedHttpResult, ProblemDetails>> ExecuteAsync(
@@ -43,14 +43,17 @@ public class AddProductsToCartBulkEndpoint : Endpoint<IEnumerable<ProductToCartR
         {
             return TypedResults.Unauthorized();
         }
+        
+        sessionToken.UsedDate = DateTimeOffset.UtcNow;
 
+        var productIdList = productIds.Select(x => x.ProductId).ToList();
         var products = await _dbContext.Products
-            .Where(p => productIds.Any(x => x.ProductId == p.Id))
+            .Where(p => productIdList.Contains(p.Id))
             .ToListAsync(ct);
 
         foreach (var product in products)
         {
-            var productInCar = new ProductInCar
+            var productInCar = new ProductInCart
             {
                 Product = product,
                 SessionToken = sessionToken,

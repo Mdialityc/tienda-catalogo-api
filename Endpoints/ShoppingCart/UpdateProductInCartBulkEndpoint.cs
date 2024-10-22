@@ -11,7 +11,7 @@ public class UpdateProductInCartBulkEndpoint(AppDbContext dbContext) : Endpoint<
     public override void Configure()
     {
         Put("/shopping-cart");
-        AllowAnonymous();
+        Roles("User");
     }
     
     public override async Task<Results<Ok, UnauthorizedHttpResult, ProblemDetails>> ExecuteAsync(
@@ -34,6 +34,8 @@ public class UpdateProductInCartBulkEndpoint(AppDbContext dbContext) : Endpoint<
         {
             return TypedResults.Unauthorized();
         }
+
+        sessionToken.UsedDate = DateTimeOffset.UtcNow;
 
         foreach (var p in productIds)
         {

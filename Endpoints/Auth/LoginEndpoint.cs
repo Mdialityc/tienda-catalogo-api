@@ -32,7 +32,7 @@ public class LoginEndpoint
 
         return TypedResults.Ok(new LoginResponse
         {
-            Token = TokenGenerator.GenerateJwtToken(AuthOptions.Value.AdminUsername, AuthOptions.Value.AdminPassword,
+            Token = TokenGenerator.GenerateJwtToken(AuthOptions.Value.AdminUsername,
                 AuthOptions.Value.Key)
         });
     }

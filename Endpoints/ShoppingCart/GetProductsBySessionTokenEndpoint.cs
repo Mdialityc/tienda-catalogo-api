@@ -3,11 +3,12 @@ using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.EntityFrameworkCore;
 using tienda_catalogo_api.Data;
 using tienda_catalogo_api.Data.Models;
+using tienda_catalogo_api.Endpoints.ShoppingCart.Responses;
 
 namespace tienda_catalogo_api.Endpoints.ShoppingCart;
 
 public class GetProductsBySessionTokenEndpoint : EndpointWithoutRequest<
-    Results<Ok<IEnumerable<Product>>, UnauthorizedHttpResult, ProblemDetails>>
+    Results<Ok<IEnumerable<ProductInCartResponse>>, UnauthorizedHttpResult, ProblemDetails>>
 {
     private readonly AppDbContext _dbContext;
 
@@ -19,15 +20,16 @@ public class GetProductsBySessionTokenEndpoint : EndpointWithoutRequest<
     public override void Configure()
     {
         Get("/shopping-cart");
-        AllowAnonymous();
+        Roles("User");
     }
 
-    public override async Task<Results<Ok<IEnumerable<Product>>, UnauthorizedHttpResult, ProblemDetails>> ExecuteAsync(
+    public override async Task<Results<Ok<IEnumerable<ProductInCartResponse>>, UnauthorizedHttpResult, ProblemDetails>> ExecuteAsync(
         CancellationToken ct)
     {
         var authorizationHeader = HttpContext.Request.Headers["Authorization"].FirstOrDefault();
         if (string.IsNullOrEmpty(authorizationHeader))
         {
+            Console.WriteLine(authorizationHeader);
             return TypedResults.Unauthorized();
         }
 
@@ -45,12 +47,19 @@ public class GetProductsBySessionTokenEndpoint : EndpointWithoutRequest<
         
         sessionToken.UsedDate = DateTimeOffset.UtcNow;
 
+        await _dbContext.SaveChangesAsync(ct);
+
         var productsInCar = await _dbContext.ProductInCars
             .Include(p => p.Product)
             .Where(pic => pic.SessionToken.Id == sessionToken.Id)
             .ToListAsync(ct);
 
-        var products = productsInCar.Select(pic => pic.Product).ToList().AsEnumerable();
+        var products = productsInCar.Select(x => new ProductInCartResponse
+        {
+            Id = x.Id,
+            Amount = x.Amount,
+            Product = x.Product
+        });
 
         return TypedResults.Ok(products);
     }

@@ -1,6 +1,6 @@
 ﻿namespace tienda_catalogo_api.Data.Models;
 
-public class ProductInCar
+public class ProductInCart
 {
     public int Id { get; set; }
     public Product Product { get; set; }
