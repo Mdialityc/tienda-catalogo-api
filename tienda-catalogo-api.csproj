@@ -28,6 +28,7 @@
 
     <ItemGroup>
       <Folder Include="Data\Migrations\" />
+      <Folder Include="Endpoints\Orders\Responses\" />
       <Folder Include="Endpoints\Products\Responses\" />
     </ItemGroup>
 
