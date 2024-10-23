@@ -13,6 +13,7 @@ public class AppDbContext : DbContext
     public DbSet<Product> Products => Set<Product>();
     public DbSet<ProductInCart> ProductInCars => Set<ProductInCart>();
     public DbSet<SessionToken> SessionTokens => Set<SessionToken>();
+    public DbSet<Order> Orders => Set<Order>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -31,5 +32,10 @@ public class AppDbContext : DbContext
             .HasOne(pic => pic.SessionToken)
             .WithMany()
             .OnDelete(DeleteBehavior.Cascade);
+        
+        modelBuilder.Entity<Order>()
+            .HasMany(o => o.Products)
+            .WithMany()
+            .UsingEntity(j => j.ToTable("OrderProducts")); 
     }
 }
